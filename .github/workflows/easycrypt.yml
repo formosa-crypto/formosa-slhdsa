@@ -1,0 +1,52 @@
+name: External CI-compatible EasyCrypt checks
+
+on:
+  push:
+    branches: [main, release]
+  pull_request:
+    branches: [main]
+
+env:
+  ECJOBS: 2
+  OPAMROOT: /home/charlie/.opam
+
+jobs:
+  check-proofs:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.ref_name == 'main'
+    container: ghcr.io/easycrypt/ec-build-box:main
+    steps:
+      - uses: actions/checkout@v6
+      - name: Pick EasyCrypt version
+        shell: bash
+        run: |
+          REF="${{ github.head_ref || github.ref_name }}"
+          case "$REF" in
+            merge-*)
+              echo "EC_BRANCH=${REF#merge-}" >> $GITHUB_ENV
+              ;;
+            *      )
+              echo "EC_BRANCH=main" >> $GITHUB_ENV
+              ;;
+          esac
+      - name: Pin easycrypt to ${EC_BRANCH}
+        run: |
+          echo 'Pinning at branch: ${EC_BRANCH}'
+          opam exec -- opam pin add -y easycrypt \
+            https://github.com/easycrypt/easycrypt.git#${EC_BRANCH}
+        shell: bash
+      - uses: ./.github/actions/easycrypt
+        with:
+          config: config/tests.config
+          check: sphincsplus
+
+  check-proofs-on-release:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'release'
+    container: ghcr.io/easycrypt/ec-test-box:release
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/easycrypt
+        with:
+          config: config/tests.config
+          check: sphincsplus
