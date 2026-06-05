@@ -1,0 +1,25 @@
+name: Run easycrypt tests
+inputs:
+  check:
+    description: What checks to run
+    required: true
+    default: ""
+  config:
+    description: Where to find the run configuration
+    required: true
+    default: "config/tests.config"
+runs:
+  using: composite
+  steps:
+    - name: Configure easycrypt
+      run: |
+        opam exec -- easycrypt why3config
+        opam exec -- easycrypt config
+      shell: bash
+    - name: Run checks
+      run: opam exec -- easycrypt runtest ${{ inputs.config }} ${{ inputs.check }}
+      shell: bash
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report-${{ github.job }}
+        path: report.log
