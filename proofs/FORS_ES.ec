@@ -5689,7 +5689,9 @@ rewrite Pr[mu_split EUF_CMA_MFORSTWESNPRF_V.valid_TRHTCR] StdOrder.RealOrder.ler
       rewrite ?size_rcons !andbA -5!andbA; split => [| /#].
       split => [adx | i j u v w ge0_i ltsz1_i ge0_j ltl_j ge0_u ltk_u ge0_v lta_v ge0_w ltnnv1_w].
       * split => [/tsdef | i j u v w ge0_i ltsz1_i ge0_j ltl_j ge0_u ltk_u ge0_v lta_v ge0_w ltnnv1_w]; 1: smt(size_ge0).
-        by rewrite tsdef; case (i < size R_TRHSMDTTCRC_EUFCMA.skFORSs{2}); smt(size_ge0).
+        rewrite tsdef; case: (i < size R_TRHSMDTTCRC_EUFCMA.skFORSs{2})=> h.
+        + by left; exists i j u v w; smt(size_ge0).
+        by right; exists j u v w; smt(size_ge0).
       rewrite ?nth_rcons.
       case (i < size R_TRHSMDTTCRC_EUFCMA.skFORSs{2}) => ? /=; 1: by rewrite nthts.
       by rewrite (: i = size R_TRHSMDTTCRC_EUFCMA.skFORSs{2}) 1:/# /= nthts1 1:/#.
