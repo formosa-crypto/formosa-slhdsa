@@ -5778,7 +5778,8 @@ seq 7 8 : (   #pre
               rewrite nth_rcons szts.
               pose igl := (_ + _ + _ + _)%Int; pose igr := (_ + _ + _ + _)%Int.
               rewrite (: igl < igr) /igl /igr 2:// /= 1:ltbignn_i 1..7://. 
-              by rewrite tsnth 1..4:// => ->; right; rewrite tsdef /#.
+              rewrite tsnth 1..4:// => ->; right; rewrite tsdef.
+              by left; exists i j u v=> /#.
             * elim=> j u v [rng_j [rng_u [rng_v]]].
               rewrite nth_rcons szts.
               pose igl := (_ + _ + _ + _)%Int; pose igr := (_ + _ + _ + _)%Int.
