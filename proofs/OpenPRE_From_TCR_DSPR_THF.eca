@@ -1285,7 +1285,7 @@ seq 1 :
    /\ (0 <= res.`3 && res.`3 < res.`4) 
    /\ (0 <= res.`4 && res.`4 <= t) /\ !res.`5 /\ res.`6 
    /\ f res.`1 res.`7 OPREg.x' = res.`8) => //.
-  rewrite /prsi; bypr => //= &m' [eqglob [-> ->]].
+  rewrite /prsi; bypr => //= &m'; rewrite Pr[mu_ge0] /= => -[eqglob [-> ->]].
   by rewrite eq_sym; apply (PrSiis_Siisa_sub _ii _jj  &m &m' _) => /#.
 
 + rnd (fun x => x <>  OPREg.x').

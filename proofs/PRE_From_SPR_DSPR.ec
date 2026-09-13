@@ -634,7 +634,7 @@ seq 1 : r prsi j1dj _ 0%r
   rnd; rnd.
   by wp; skip.
 + call (_ : (glob A) = (glob A){m} /\ arg = j ==> res) => //.
-  rewrite /prsi; bypr => //= &m' [eq_glob ->].
+  rewrite /prsi; bypr => //= &m'; rewrite Pr[mu_ge0] /= => -[eq_glob ->].
   byequiv=> //=; symmetry.
   transitivity Si_inverse_sample_alt.orig_ss (={glob A, arg} ==> ={res}) 
                                              (={glob A, arg} ==> ={res}) => //=.

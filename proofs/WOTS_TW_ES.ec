@@ -5510,7 +5510,7 @@ have ->:
     * by rnd.
     * by rnd; skip.
     * call (: (glob A) = (glob A){m} /\ b = false /\ i = j ==> res) => //.
-      rewrite /pr; bypr => |> &m' eq_glob -> ->.
+      rewrite /pr; bypr => &m'; rewrite Pr[mu_ge0] /=; move => |> eq_glob ->.
       byequiv (: ={glob A, b, i} ==> _) => //.
       by proc; sim.
     * hoare; call (: true) => //; skip => /#.
@@ -5524,7 +5524,7 @@ have ->:
     - by rnd.
     - by rnd; skip.
     - call (: (glob A) = (glob A){m} /\ b = true /\ i = j ==> res) => //.
-      rewrite /pr; bypr => |> &m' eq_glob -> ->.
+      rewrite /pr; bypr => &m'; rewrite Pr[mu_ge0] /=; move => |> eq_glob ->.
       byequiv (: ={glob A, b, i} ==> _) => //.
       by proc; sim.
     - hoare; call (: true) => //; skip => /#.
